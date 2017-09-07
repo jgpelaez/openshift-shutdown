@@ -13,9 +13,12 @@ function quit {
 function scale_down {
 	project=$1
 	for i in $( < ${project_file_name}"-"${project}${project_file_ext} ); do
-	  oc scale -n $( echo $i|cut -d',' -f1) \
-	    dc/$( echo $i|cut -d',' -f2) \
-	    --replicas=0
+		initialReplicas=$( echo $i|cut -d',' -f3)
+		if [ "$initialReplicas" -ne "0" ]; then
+			oc scale -n $( echo $i|cut -d',' -f1) \
+			  dc/$( echo $i|cut -d',' -f2) \
+			  --replicas=0
+		fi
 	done
 }
 
